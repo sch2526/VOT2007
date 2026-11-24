@@ -227,70 +227,103 @@
         opacity: 1 !important;
         transform: translateX(-50%) scale(1.3);
     }
+    /* Language selector */
+    .language-selector {
+        position: fixed;
+        top: 15px;
+        right: 20px;
+        z-index: 200;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        background: rgba(255, 255, 255, 0.96);
+        padding: 8px 12px;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+        font-size: 0.9em;
+        color: #2c3e50;
+    }
+    .language-selector select {
+        padding: 5px 8px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        font-size: 1em;
+        cursor: pointer;
+        background: white;
+    }
 </style>
 </head>
 <body>
+<!-- Language Selection (top right) -->
+<div class="language-selector">
+    <label for="language-select" data-i18n="languageLabel">🌐 Language:</label>
+    <select id="language-select" onchange="setLanguage(this.value)">
+        <option value="en">English</option>
+        <option value="zh-Hant">繁體中文</option>
+        <option value="zh-Hans">简体中文</option>
+    </select>
+</div>
 <!-- Main Menu Page -->
 <div id="menu-screen" class="screen active">
-    <h1>♻️ Garbage Sort & Trash-To-Treasure Challenge</h1>
-    <p style="font-size: 1.2em; color: #27ae60; font-weight: bold;">Become an environmental master, turn waste into treasure!</p>
+    <h1 data-i18n="menuTitle">♻️ Garbage Sort & Trash-To-Treasure Challenge</h1>
+    <p style="font-size: 1.2em; color: #27ae60; font-weight: bold;" data-i18n="menuSubtitle">Become an environmental master, turn waste into treasure!</p>
     <div class="instructions">
-        <b>💡 Game Rules:</b><br>
-        1. Drag waste into the correct bin <b>(+5 points each)</b><br>
-        2. Wrong classification consumes 1 life; game over after 3 mistakes<br>
-        3. Collect recyclables to craft handmade goods for massive bonus points
+        <b data-i18n="rulesTitle">💡 Game Rules:</b><br>
+        <span data-i18n="rule1">1. Drag waste into the correct bin <b>(+5 points each)</b></span><br>
+        <span data-i18n="rule2">2. Wrong classification consumes 1 life; game over after 3 mistakes</span><br>
+        <span data-i18n="rule3">3. Collect recyclables to craft handmade goods for massive bonus points</span>
     </div>
     <div class="leaderboard">
-        <h3>🏆 Top 5 Leaderboard</h3>
+        <h3 data-i18n="leaderboardTitle">🏆 Top 5 Leaderboard</h3>
         <div id="leader-list"><p>No scores yet</p></div>
     </div>
-    <button class="btn-main" onclick="startGame()">Start Challenge</button>
+    <button class="btn-main" onclick="startGame()" data-i18n="startButton">Start Challenge</button>
 </div>
 
 <!-- Game Running Page -->
 <div id="game-screen" class="screen">
     <div class="stats-bar">
-        <div>Score: <span id="score" style="color:#f1c40f; font-weight:bold;">0</span></div>
-        <div>Time: <span id="timer" style="color:#f1c40f; font-weight:bold;">90</span>s</div>
-        <div>Lives: <span id="lives" class="lives">❤️❤️❤️</span></div>
-        <div>Recycled Materials: <span id="inv" style="color:#f1c40f; font-weight:bold;">0</span></div>
+        <div><span data-i18n="scoreLabel">Score:</span> <span id="score" style="color:#f1c40f; font-weight:bold;">0</span></div>
+        <div><span data-i18n="timeLabel">Time:</span> <span id="timer" style="color:#f1c40f; font-weight:bold;">90</span>s</div>
+        <div><span data-i18n="livesLabel">Lives:</span> <span id="lives" class="lives">❤️❤️❤️</span></div>
+        <div><span data-i18n="materialsLabel">Recycled Materials:</span> <span id="inv" style="color:#f1c40f; font-weight:bold;">0</span></div>
     </div>
     <div class="bins-container">
         <div class="bin" id="recyclable" ondrop="drop(event)" ondragover="allowDrop(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)">
             <span style="font-size: 3.5em;">♻️</span>
-            <div style="font-weight:bold;">Recyclables</div>
+            <div style="font-weight:bold;" data-i18n="binRecyclable">Recyclables</div>
         </div>
         <div class="bin" id="hazardous" ondrop="drop(event)" ondragover="allowDrop(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)">
             <span style="font-size: 3.5em;">☣️</span>
-            <div style="font-weight:bold;">Hazardous Waste</div>
+            <div style="font-weight:bold;" data-i18n="binHazardous">Hazardous Waste</div>
         </div>
         <div class="bin" id="kitchen" ondrop="drop(event)" ondragover="allowDrop(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)">
             <span style="font-size: 3.5em;">🍎</span>
-            <div style="font-weight:bold;">Food Waste</div>
+            <div style="font-weight:bold;" data-i18n="binKitchen">Food Waste</div>
         </div>
         <div class="bin" id="other" ondrop="drop(event)" ondragover="allowDrop(event)" ondragenter="dragEnter(event)" ondragleave="dragLeave(event)">
             <span style="font-size: 3.5em;">🗑️</span>
-            <div style="font-weight:bold;">Residual Waste</div>
+            <div style="font-weight:bold;" data-i18n="binOther">Residual Waste</div>
         </div>
     </div>
     <div class="trash-tray" id="waste-tray"></div>
     <div class="crafting-lab">
-        <h3>🛠️ Upcycling Workshop</h3>
+        <h3 data-i18n="workshopTitle">🛠️ Upcycling Workshop</h3>
         <div class="crafting-grid">
             <div class="recipe-card">
-                <b>🎨 Art Vase</b><br>
-                Requires 3 Materials
-                <button class="btn-craft" id="craft1" onclick="makeItem(3, 20, 'Art Vase')">Craft (+20pts)</button>
+                <b data-i18n="artVase">🎨 Art Vase</b><br>
+                <span data-i18n="requires3">Requires 3 Materials</span>
+                <button class="btn-craft" id="craft1" onclick="makeItem(3, 20, 'artVase')" data-i18n="craft1">Craft (+20pts)</button>
             </div>
             <div class="recipe-card">
-                <b>🤖 Tech Robot</b><br>
-                Requires 6 Materials
-                <button class="btn-craft" id="craft2" onclick="makeItem(6, 50, 'Tech Robot')">Craft (+50pts)</button>
+                <b data-i18n="techRobot">🤖 Tech Robot</b><br>
+                <span data-i18n="requires6">Requires 6 Materials</span>
+                <button class="btn-craft" id="craft2" onclick="makeItem(6, 50, 'techRobot')" data-i18n="craft2">Craft (+50pts)</button>
             </div>
             <div class="recipe-card">
-                <b>🏗️ Eco Building Model</b><br>
-                Requires 10 Materials
-                <button class="btn-craft" id="craft3" onclick="makeItem(10, 100, 'Eco Building Model')">Craft (+100pts)</button>
+                <b data-i18n="ecoBuilding">🏗️ Eco Building Model</b><br>
+                <span data-i18n="requires10">Requires 10 Materials</span>
+                <button class="btn-craft" id="craft3" onclick="makeItem(10, 100, 'ecoBuilding')" data-i18n="craft3">Craft (+100pts)</button>
             </div>
         </div>
     </div>
@@ -367,8 +400,203 @@ const wasteList = [
     {name: "Broken Mirror", type: "other", icon: "🪞"}
 ];
 
-// Initialize leaderboard on page load
-window.onload = renderLeaderboard();
+// Language support: English / Traditional Chinese / Simplified Chinese
+let currentLanguage = "en";
+const translations = {
+    en: {
+        pageTitle: "Garbage Sort & Trash-To-Treasure Challenge",
+        languageLabel: "🌐 Language:",
+        menuTitle: "♻️ Garbage Sort & Trash-To-Treasure Challenge",
+        menuSubtitle: "Become an environmental master, turn waste into treasure!",
+        rulesTitle: "💡 Game Rules:",
+        rule1: "1. Drag waste into the correct bin <b>(+5 points each)</b>",
+        rule2: "2. Wrong classification consumes 1 life; game over after 3 mistakes",
+        rule3: "3. Collect recyclables to craft handmade goods for massive bonus points",
+        leaderboardTitle: "🏆 Top 5 Leaderboard",
+        noScores: "No scores yet",
+        startButton: "Start Challenge",
+        scoreLabel: "Score:",
+        timeLabel: "Time:",
+        livesLabel: "Lives:",
+        materialsLabel: "Recycled Materials:",
+        binRecyclable: "Recyclables",
+        binHazardous: "Hazardous Waste",
+        binKitchen: "Food Waste",
+        binOther: "Residual Waste",
+        workshopTitle: "🛠️ Upcycling Workshop",
+        artVase: "🎨 Art Vase",
+        techRobot: "🤖 Tech Robot",
+        ecoBuilding: "🏗️ Eco Building Model",
+        requires3: "Requires 3 Materials",
+        requires6: "Requires 6 Materials",
+        requires10: "Requires 10 Materials",
+        craft1: "Craft (+20pts)",
+        craft2: "Craft (+50pts)",
+        craft3: "Craft (+100pts)",
+        craftSuccess: "Successfully crafted [{item}]! +{bonus} Points",
+        gameOverMistakes: "You made 3 wrong sorts! Game Over",
+        gameOverTime: "Time's Up! Challenge Finished",
+        scorePrompt: "{message}\nYour Final Score: {score}\nEnter your name:",
+        defaultPlayer: "Eco Player",
+        pointsShort: "pts",
+        waste: {
+            newspaper: "Newspaper", plasticBottle: "Plastic Bottle", aluminumCan: "Aluminum Can",
+            oldClothes: "Old Clothes", glassCup: "Glass Cup", cardboardBox: "Cardboard Box",
+            scrapMetal: "Scrap Metal", usedBooks: "Used Books", wasteBattery: "Waste Battery",
+            expiredMedicine: "Expired Medicine", mercuryThermometer: "Mercury Thermometer",
+            paintBucket: "Paint Bucket", insecticide: "Insecticide", fluorescentTube: "Fluorescent Tube",
+            leftovers: "Leftovers", fruitPeels: "Fruit Peels", deadFlowers: "Dead Flowers",
+            bones: "Bones", teaLeaves: "Tea Leaves", eggshells: "Eggshells",
+            cigaretteButts: "Cigarette Butts", brokenCeramics: "Broken Ceramics",
+            disposableMask: "Disposable Mask", wetWipes: "Wet Wipes", takeoutBoxes: "Takeout Boxes",
+            diapers: "Diapers", largeBones: "Large Bones", dust: "Dust",
+            dirtyPaper: "Dirty Paper", brokenMirror: "Broken Mirror"
+        }
+    },
+    "zh-Hant": {
+        pageTitle: "垃圾分類與變廢為寶挑戰",
+        languageLabel: "🌐 語言：",
+        menuTitle: "♻️ 垃圾分類與變廢為寶挑戰",
+        menuSubtitle: "成為環保達人，讓垃圾變廢為寶！",
+        rulesTitle: "💡 遊戲規則：",
+        rule1: "1. 將垃圾拖曳到正確的垃圾桶 <b>(每題 +5 分)</b>",
+        rule2: "2. 分類錯誤會損失 1 條命；錯 3 次遊戲結束",
+        rule3: "3. 收集可回收物製作手工藝品，可獲得大量加分",
+        leaderboardTitle: "🏆 前五名排行榜",
+        noScores: "尚無成績",
+        startButton: "開始挑戰",
+        scoreLabel: "分數：",
+        timeLabel: "時間：",
+        livesLabel: "生命：",
+        materialsLabel: "回收材料：",
+        binRecyclable: "資源回收",
+        binHazardous: "有害廢棄物",
+        binKitchen: "廚餘",
+        binOther: "一般垃圾",
+        workshopTitle: "🛠️ 升級再造工坊",
+        artVase: "🎨 藝術花瓶",
+        techRobot: "🤖 科技機器人",
+        ecoBuilding: "🏗️ 環保建築模型",
+        requires3: "需要 3 個材料",
+        requires6: "需要 6 個材料",
+        requires10: "需要 10 個材料",
+        craft1: "製作 (+20分)",
+        craft2: "製作 (+50分)",
+        craft3: "製作 (+100分)",
+        craftSuccess: "成功製作 [{item}]！+{bonus} 分",
+        gameOverMistakes: "答錯 3 次！遊戲結束",
+        gameOverTime: "時間到！挑戰結束",
+        scorePrompt: "{message}\n你的最終分數：{score}\n請輸入你的名字：",
+        defaultPlayer: "環保玩家",
+        pointsShort: "分",
+        waste: {
+            newspaper: "報紙", plasticBottle: "塑膠瓶", aluminumCan: "鋁罐",
+            oldClothes: "舊衣服", glassCup: "玻璃杯", cardboardBox: "紙箱",
+            scrapMetal: "廢金屬", usedBooks: "舊書", wasteBattery: "廢電池",
+            expiredMedicine: "過期藥品", mercuryThermometer: "水銀溫度計",
+            paintBucket: "油漆桶", insecticide: "殺蟲劑", fluorescentTube: "日光燈管",
+            leftovers: "剩菜", fruitPeels: "果皮", deadFlowers: "枯萎的花",
+            bones: "骨頭", teaLeaves: "茶葉", eggshells: "蛋殼",
+            cigaretteButts: "煙蒂", brokenCeramics: "破損陶瓷",
+            disposableMask: "一次性口罩", wetWipes: "濕紙巾", takeoutBoxes: "外帶餐盒",
+            diapers: "尿布", largeBones: "大骨頭", dust: "灰塵",
+            dirtyPaper: "污損紙張", brokenMirror: "破鏡子"
+        }
+    },
+    "zh-Hans": {
+        pageTitle: "垃圾分类与变废为宝挑战",
+        languageLabel: "🌐 语言：",
+        menuTitle: "♻️ 垃圾分类与变废为宝挑战",
+        menuSubtitle: "成为环保达人，让垃圾变废为宝！",
+        rulesTitle: "💡 游戏规则：",
+        rule1: "1. 将垃圾拖到正确的垃圾桶 <b>(每题 +5 分)</b>",
+        rule2: "2. 分类错误会损失 1 条命；错 3 次游戏结束",
+        rule3: "3. 收集可回收物制作手工艺品，可获得大量加分",
+        leaderboardTitle: "🏆 前五名排行榜",
+        noScores: "暂无成绩",
+        startButton: "开始挑战",
+        scoreLabel: "分数：",
+        timeLabel: "时间：",
+        livesLabel: "生命：",
+        materialsLabel: "回收材料：",
+        binRecyclable: "可回收物",
+        binHazardous: "有害垃圾",
+        binKitchen: "厨余",
+        binOther: "其他垃圾",
+        workshopTitle: "🛠️ 升级再造工坊",
+        artVase: "🎨 艺术花瓶",
+        techRobot: "🤖 科技机器人",
+        ecoBuilding: "🏗️ 环保建筑模型",
+        requires3: "需要 3 个材料",
+        requires6: "需要 6 个材料",
+        requires10: "需要 10 个材料",
+        craft1: "制作 (+20分)",
+        craft2: "制作 (+50分)",
+        craft3: "制作 (+100分)",
+        craftSuccess: "成功制作 [{item}]！+{bonus} 分",
+        gameOverMistakes: "答错 3 次！游戏结束",
+        gameOverTime: "时间到！挑战结束",
+        scorePrompt: "{message}\n你的最终分数：{score}\n请输入你的名字：",
+        defaultPlayer: "环保玩家",
+        pointsShort: "分",
+        waste: {
+            newspaper: "报纸", plasticBottle: "塑料瓶", aluminumCan: "铝罐",
+            oldClothes: "旧衣服", glassCup: "玻璃杯", cardboardBox: "纸箱",
+            scrapMetal: "废金属", usedBooks: "旧书", wasteBattery: "废电池",
+            expiredMedicine: "过期药品", mercuryThermometer: "水银温度计",
+            paintBucket: "油漆桶", insecticide: "杀虫剂", fluorescentTube: "日光灯管",
+            leftovers: "剩菜", fruitPeels: "果皮", deadFlowers: "枯萎的花",
+            bones: "骨头", teaLeaves: "茶叶", eggshells: "蛋壳",
+            cigaretteButts: "烟蒂", brokenCeramics: "破损陶瓷",
+            disposableMask: "一次性口罩", wetWipes: "湿纸巾", takeoutBoxes: "外卖餐盒",
+            diapers: "尿布", largeBones: "大骨头", dust: "灰尘",
+            dirtyPaper: "污损纸张", brokenMirror: "破镜子"
+        }
+    }
+};
+
+function translate(key, vars) {
+    let text = (translations[currentLanguage] && translations[currentLanguage][key]) || translations.en[key] || key;
+    if (vars) {
+        Object.keys(vars).forEach(name => {
+            text = text.split("{" + name + "}").join(vars[name]);
+        });
+    }
+    return text;
+}
+
+function getWasteName(englishName) {
+    const enWaste = translations.en.waste;
+    const key = Object.keys(enWaste).find(k => enWaste[k] === englishName);
+    return (key && translations[currentLanguage].waste[key]) || englishName;
+}
+
+function setLanguage(lang) {
+    if (!translations[lang]) lang = "en";
+    currentLanguage = lang;
+    document.documentElement.lang = lang;
+    document.title = translate("pageTitle");
+    document.getElementById("language-select").value = lang;
+    document.querySelectorAll("[data-i18n]").forEach(el => {
+        el.innerHTML = translate(el.dataset.i18n);
+    });
+    document.querySelectorAll(".trash-item").forEach(el => {
+        const label = el.querySelector("div");
+        if (label && el.dataset.itemName) label.textContent = getWasteName(el.dataset.itemName);
+    });
+    localStorage.setItem("wasteGameLanguage", lang);
+    renderLeaderboard();
+}
+
+function initLanguage() {
+    const saved = localStorage.getItem("wasteGameLanguage");
+    setLanguage(saved && translations[saved] ? saved : "en");
+}
+
+// Initialize language and leaderboard on page load
+window.onload = function() {
+    initLanguage();
+};
 
 // Start Game Function
 function startGame() {
@@ -403,7 +631,8 @@ function spawnWaste() {
     div.draggable = true;
     const uniqueID = "waste-" + Math.random().toString(36);
     div.id = uniqueID;
-    div.innerHTML = `<span style="font-size:2.5em">${randomItem.icon}</span><div>${randomItem.name}</div>`;
+    div.innerHTML = `<span style="font-size:2.5em">${randomItem.icon}</span><div>${getWasteName(randomItem.name)}</div>`;
+    div.dataset.itemName = randomItem.name;
     div.dataset.category = randomItem.type;
     div.ondragstart = function(e) {
         e.dataTransfer.setData("text", uniqueID);
@@ -440,7 +669,7 @@ function drop(e) {
         document.getElementById("lives").innerText = "❤️".repeat(3 - errorCount) || "❌";
         playTone("wrong");
         showHint("❌", "#e74c3c");
-        if(errorCount >= 3) gameOver("You made 3 wrong sorts! Game Over");
+        if(errorCount >= 3) gameOver(translate("gameOverMistakes"));
     }
     document.getElementById("score").innerText = score;
     wasteEl.remove();
@@ -465,7 +694,7 @@ function makeItem(cost, bonus, itemName) {
         document.getElementById("inv").innerText = materials;
         document.getElementById("score").innerText = score;
         playTone("craft");
-        alert(`Successfully crafted [${itemName}]! +${bonus} Points`);
+        alert(translate("craftSuccess", {item: translate(itemName), bonus: bonus}));
         refreshCraftButtons();
     }
 }
@@ -483,7 +712,7 @@ function countDown() {
         timeLeft--;
         document.getElementById("timer").innerText = timeLeft;
     } else {
-        gameOver("Time's Up! Challenge Finished");
+        gameOver(translate("gameOverTime"));
     }
 }
 
@@ -492,7 +721,7 @@ function gameOver(message) {
     gameRunning = false;
     clearInterval(timerID);
     setTimeout(() => {
-        const playerName = prompt(`${message}\nYour Final Score: ${score}\nEnter your name:`, "Eco Player");
+        const playerName = prompt(translate("scorePrompt", {message: message, score: score}), translate("defaultPlayer"));
         if(playerName) saveScore(playerName, score);
         // Back to menu
         document.getElementById("game-screen").classList.remove("active");
@@ -515,7 +744,7 @@ function renderLeaderboard() {
     const container = document.getElementById("leader-list");
     const data = JSON.parse(localStorage.getItem("wasteGameScores")) || [];
     if(data.length === 0) {
-        container.innerHTML = "<p>No scores yet</p>";
+        container.innerHTML = "<p>" + translate("noScores") + "</p>";
         return;
     }
     let html = "";
@@ -523,7 +752,7 @@ function renderLeaderboard() {
         html += `<div class="score-row">
             <span class="rank">${idx+1}</span>
             <span class="name">${row.player}</span>
-            <span>${row.score} pts</span>
+            <span>${row.score} ${translate("pointsShort")}</span>
         </div>`;
     });
     container.innerHTML = html;
